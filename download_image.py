@@ -6,4 +6,12 @@ def download_image(file_url, path):
     with open(path, 'wb') as file:
         file.write(response.content)
 
-download_image("https://upload.wikimedia.org/wikipedia/commons/3/3f/HST-SM4.jpeg", 'images/hubble.jpeg')
+def get_spacex_images():
+    response = requests.get('https://api.spacexdata.com/v5/launches/5eb87d47ffd86e000604b38a')
+    response.raise_for_status()
+    images_info = response.json()
+    all_images_links = images_info['links']['flickr']['original']
+    return all_images_links
+
+# download_image("https://upload.wikimedia.org/wikipedia/commons/3/3f/HST-SM4.jpeg", 'images/hubble.jpeg')
+get_spacex_images()
