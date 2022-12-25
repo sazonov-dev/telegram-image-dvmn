@@ -1,5 +1,6 @@
 import requests
 import os
+import random
 
 from urllib.parse import urlparse, unquote
 from dotenv import load_dotenv
@@ -28,18 +29,29 @@ def fetch_spacex_last_launch():
         download_image(images, f'images/spacex{image_number}.jpg')
 
 def get_ext(url):
-    response = requests.get(url + nasa_api_token)
-    response.raise_for_status()
-    nasa_info = response.json()
-    url_parse = urlparse(nasa_info['url'])
+    url_parse = urlparse(url)
     unquote_parse = unquote(url_parse.scheme + url_parse.netloc + url_parse.path)
     extension = splitext(unquote_parse)[1]
     return extension
+
+def download_nasa_images(url):
+    random_count = random.randint(30, 50)
+    params = {
+        "count": random_count,
+        "api_key": nasa_api_token
+    }
+    response = requests.get(url, params=params)
+    nasa_info = response.json()
+
+    for image_number, nasa_info in enumerate(nasa_info):
+        extension = get_ext(nasa_info['url'])
+        if not extension:
+            return
+        download_image(nasa_info['url'], f'images/nasa_apod_{image_number}{extension}')
 
 
 
 # download_image("https://upload.wikimedia.org/wikipedia/commons/3/3f/HST-SM4.jpeg", 'images/hubble.jpeg')
 # get_spacex_images()
 # fetch_spacex_last_launch()
-
-get_ext('https://api.nasa.gov/planetary/apod?api_key=')
+download_nasa_images('https://api.nasa.gov/planetary/apod')
