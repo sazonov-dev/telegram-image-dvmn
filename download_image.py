@@ -1,6 +1,7 @@
 import requests
 import os
 import random
+import datetime
 
 from urllib.parse import urlparse, unquote
 from dotenv import load_dotenv
@@ -11,7 +12,10 @@ splitext = os.path.splitext
 nasa_api_token = os.environ["NASA_API_TOKEN"]
 
 def download_image(url, path):
-    response = requests.get(url)
+    params = {
+        "api_key": nasa_api_token
+    }
+    response = requests.get(url,params=params)
     response.raise_for_status()
     with open(path, 'wb') as file:
         file.write(response.content)
@@ -34,6 +38,18 @@ def get_ext(url):
     extension = splitext(unquote_parse)[1]
     return extension
 
+def get_epic_image(url):
+    params = {
+        "api_key": nasa_api_token
+    }
+    response = requests.get(url,params=params)
+    response.raise_for_status()
+    epic_info = response.json()
+    for epic_number, epic_info in enumerate(epic_info):
+        image_name = epic_info['image']
+        image_date = epic_info['date'].split(' ')[0].replace('-', '/')
+        download_image(f'https://api.nasa.gov/EPIC/archive/natural/{image_date}/png/{image_name}.png', f'images/epic_{epic_number}.png')
+
 def download_nasa_images(url):
     random_count = random.randint(30, 50)
     params = {
@@ -54,4 +70,5 @@ def download_nasa_images(url):
 # download_image("https://upload.wikimedia.org/wikipedia/commons/3/3f/HST-SM4.jpeg", 'images/hubble.jpeg')
 # get_spacex_images()
 # fetch_spacex_last_launch()
-download_nasa_images('https://api.nasa.gov/planetary/apod')
+# download_nasa_images('https://api.nasa.gov/planetary/apod')
+get_epic_image('https://api.nasa.gov/EPIC/api/natural/images')
