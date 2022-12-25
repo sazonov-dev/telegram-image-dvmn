@@ -13,5 +13,11 @@ def get_spacex_images():
     all_images_links = images_info['links']['flickr']['original']
     return all_images_links
 
+def download_all_images():
+    images = get_spacex_images()
+    for image_number, images in enumerate(images):
+        download_image(images, f'images/spacex{image_number}.jpg')
+
 # download_image("https://upload.wikimedia.org/wikipedia/commons/3/3f/HST-SM4.jpeg", 'images/hubble.jpeg')
-get_spacex_images()
+# get_spacex_images()
+download_all_images()
