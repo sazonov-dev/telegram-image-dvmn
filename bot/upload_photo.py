@@ -5,7 +5,6 @@ import glob
 import telegram
 
 from dotenv import load_dotenv
-from PIL import Image
 load_dotenv()
 telegram_bot_token = os.environ['TG_BOT_TOKEN']
 
