@@ -1,11 +1,11 @@
-import os
-
+import os.path
 from urllib.parse import urlparse, unquote
-splitext = os.path.splitext
-
 
 def get_ext(url):
-    url_parse = urlparse(url)
-    unquote_parse = unquote(url_parse.scheme + url_parse.netloc + url_parse.path)
-    extension = splitext(unquote_parse)[1]
+    url = urlparse(url)
+    url_unquote = unquote(url.scheme + url.netloc + url.path)
+    for element in url_unquote:
+        if element == '%s' or element == '+':
+            url_unquote.replace(element, '')
+    extension = os.path.splitext(url_unquote)[1]
     return extension
