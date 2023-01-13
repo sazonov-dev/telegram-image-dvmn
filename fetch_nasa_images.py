@@ -4,9 +4,8 @@ import random
 
 from download_image import download_img
 from get_file_extension import get_ext
-nasa_api_token = os.environ["NASA_API_TOKEN"]
 
-def get_epic_image(url):
+def get_epic_image(url, nasa_api_token):
     params = {
         "api_key": nasa_api_token
     }
@@ -18,7 +17,7 @@ def get_epic_image(url):
         image_date = epic_image['date'].split(' ')[0].replace('-', '/')
         download_img(f'https://api.nasa.gov/EPIC/archive/natural/{image_date}/png/{image_name}.png', f'images/epic_{epic_number}.png')
 
-def download_nasa_images(url):
+def download_nasa_images(url, nasa_api_token):
     random_count = random.randint(30, 50)
     params = {
         "count": random_count,

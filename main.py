@@ -10,12 +10,13 @@ from fetch_spacex_images import fetch_spacex_image
 
 def main():
     load_dotenv()
-    parser = argparse.ArgumentParser(argument_default=None)
-    parser.add_argument('id', nargs='*')
+    parser = argparse.ArgumentParser(argument_default=None, description='Берет фото ID SpaceX запуска')
+    parser.add_argument('id', default='5eb87d47ffd86e000604b38a', nargs='*', help='Необходимо вставь ID запуска с сайта https://api.spacexdata.com/v5')
     args = parser.parse_args()
     fetch_spacex_image(args.id)
     telegram_bot_token = os.environ['TG_BOT_TOKEN']
     telegram_chat_id = os.environ['TG_CHAT_ID']
+    nasa_api_token = os.environ["NASA_API_TOKEN"]
     bot = telegram.Bot(token=telegram_bot_token)
 
     uploads = 0
