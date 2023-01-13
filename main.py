@@ -7,18 +7,20 @@ import argparse
 from dotenv import load_dotenv
 
 from fetch_spacex_images import fetch_spacex_image
+from fetch_nasa_images import download_nasa_images
 
 def main():
     load_dotenv()
-    parser = argparse.ArgumentParser(argument_default=None, description='Берет фото ID SpaceX запуска')
-    parser.add_argument('id', default='5eb87d47ffd86e000604b38a', nargs='*', help='Необходимо вставь ID запуска с сайта https://api.spacexdata.com/v5')
-    args = parser.parse_args()
-    fetch_spacex_image(args.id)
     telegram_bot_token = os.environ['TG_BOT_TOKEN']
     telegram_chat_id = os.environ['TG_CHAT_ID']
     nasa_api_token = os.environ["NASA_API_TOKEN"]
     count_upload = int(os.environ['COUNT_OF_UPLOAD'])
     hour_upload = int(os.environ['HOUR_OF_UPLOAD'])
+    parser = argparse.ArgumentParser(argument_default=None, description='Берет фото ID SpaceX запуска')
+    parser.add_argument('id', default='5eb87d47ffd86e000604b38a', nargs='*', help='Необходимо вставь ID запуска с сайта https://api.spacexdata.com/v5')
+    args = parser.parse_args()
+    fetch_spacex_image(args.id)
+    download_nasa_images('https://api.nasa.gov/planetary/apod', nasa_api_token)
     bot = telegram.Bot(token=telegram_bot_token)
 
     uploads = 0
