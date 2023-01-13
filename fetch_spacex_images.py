@@ -8,8 +8,8 @@ def fetch_spacex_image(id):
     else:
         response = requests.get(f'https://api.spacexdata.com/v5/launches/{id}')
     response.raise_for_status()
-    response_to_json = response.json()
-    download_spacex_image(response_to_json)
+    spacex_response_content = response.json()
+    download_spacex_image(spacex_response_content)
 
 def download_spacex_image(response):
     images = response['links']['flickr']['original']
