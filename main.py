@@ -17,12 +17,12 @@ def main():
     telegram_bot_token = os.environ['TG_BOT_TOKEN']
     telegram_chat_id = os.environ['TG_CHAT_ID']
     nasa_api_token = os.environ["NASA_API_TOKEN"]
+    count_upload = int(os.environ['COUNT_OF_UPLOAD'])
+    hour_upload = int(os.environ['HOUR_OF_UPLOAD'])
     bot = telegram.Bot(token=telegram_bot_token)
 
     uploads = 0
     while True:
-        count_upload = int(os.environ['COUNT_OF_UPLOAD'])
-        hour_upload = int(os.environ['HOUR_OF_UPLOAD'])
         images = glob.glob("./images/*")
         random_image_index = random.randint(0, len(images) - 1)
         seconds = hour_upload * 60 * 60
