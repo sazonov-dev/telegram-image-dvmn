@@ -15,7 +15,11 @@ def get_epic_image(url, nasa_api_token):
     for epic_number, epic_image in enumerate(nasa_response_content):
         image_name = epic_image['image']
         image_date = epic_image['date'].split(' ')[0].replace('-', '/')
-        download_img(f'https://api.nasa.gov/EPIC/archive/natural/{image_date}/png/{image_name}.png', f'images/epic_{epic_number}.png')
+        url = f'https://api.nasa.gov/EPIC/archive/natural/{image_date}/png/{image_name}.png'
+        response = requests.get(url,params=params)
+        response.raise_for_status()
+        with open(f'images/epic_{epic_number}.png', 'wb') as file:
+            file.write(response.content)
 
 def download_nasa_images(url, nasa_api_token):
     random_count = random.randint(30, 50)
@@ -25,7 +29,6 @@ def download_nasa_images(url, nasa_api_token):
     }
     response = requests.get(url, params=params)
     nasa_response_content = response.json()
-
     for image_number, nasa_image in enumerate(nasa_response_content):
         extension = get_ext(nasa_image['url'])
         if not extension:
